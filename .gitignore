@@ -1,7 +1,7 @@
 # created by virtualenv automatically
-.png
-.env
-.log
+*.png
+*.env
+*.log
 .idea/
 .venv/
 __pycache__/
