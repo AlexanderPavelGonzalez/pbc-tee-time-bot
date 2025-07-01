@@ -47,31 +47,8 @@ set +a
 python book_tee_time.py
 ```
 
-Or use the provided shell script:
-```bash
-./run_booking.sh
-```
-
-## Automation with Cron
-
-To schedule the script to run automatically (e.g., every Saturday and Sunday at 5:00 AM and 6:00 AM EST), add this to your crontab:
-```
-0 5,6 * * 6,0 /Users/alexandergonzalez/PBC_Bot/run_booking.sh
-```
-> **Note:** Your computer must be on and awake for cron jobs to run.
-
 ## Logging
 
 All output is logged to `cron_script_run.log` in the project directory.
 
-## Running on a Raspberry Pi or Server
-
-You can run this project on a Raspberry Pi or any always-on Linux server for reliable automation. Just clone the repo, set up Python and Playwright, and configure your `.env` and cron job as above.
-
-## GitHub Actions (Optional)
-
-You can also automate bookings using GitHub Actions. See `main_prompt.md` for a sample workflow.
-
 ---
-
-Let us know if you have any questions or want to contribute! 
