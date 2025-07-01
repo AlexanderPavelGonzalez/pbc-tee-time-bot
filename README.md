@@ -4,10 +4,9 @@ This project automates the process of booking a public golf tee time at Okeeheel
 
 ## Features
 
-- Automatically selects the desired date, time range, number of players, and golf course (Park Ridge, Okeeheelee, or Osprey Point).
+- Automatically selects the desired date, time range, number of players, and golf course (Okeeheelee or Osprey Point).
 - Logs in with your PBC credentials.
 - Fills out the booking form and confirms the reservation.
-- Runs headlessly for automation (e.g., via cron or GitHub Actions).
 - Logs each step for easy debugging.
 
 ## Requirements
