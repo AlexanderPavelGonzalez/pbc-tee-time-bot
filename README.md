@@ -32,7 +32,6 @@ TIME_RANGE_END=11:00           # Latest tee time (24h format)
 PLAYERS=4                      # Number of players (1-4)
 EMAIL=your@email.com           # PBC login email
 PASSWORD=yourpassword          # PBC login password
-COURSE=Park Ridge              # Course name: Park Ridge, Okeeheelee, or Osprey Point
 ```
 
 ## Usage
