@@ -27,12 +27,12 @@ jobs:
     - name: Create .env file
       run: |
         cat << EOF > .env
-        TIME_RANGE_START=${{ secrets.TIME_RANGE_START }}
-        TIME_RANGE_END=${{ secrets.TIME_RANGE_END }}
-        PLAYERS=${{ secrets.PLAYERS }}
+        TIME_RANGE_START=${{ secrets.TIME_RANGE_START || '08:00' }}
+        TIME_RANGE_END=${{ secrets.TIME_RANGE_END || '12:00' }}
+        PLAYERS=${{ secrets.PLAYERS || '4' }}
         EMAIL=${{ secrets.EMAIL }}
         PASSWORD=${{ secrets.PASSWORD }}
-        OSPREY_ONLY=${{ secrets.OSPREY_ONLY }}
+        OSPREY_ONLY=${{ secrets.OSPREY_ONLY || 'false' }}
         EOF
         
     - name: Run booking script
