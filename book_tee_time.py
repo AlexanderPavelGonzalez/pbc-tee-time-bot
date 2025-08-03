@@ -183,6 +183,7 @@ async def select_booking_information(page, players):
     Clicks the 'Book Time' button to proceed.
     """
     logger.info("=== SELECTING BOOKING INFORMATION START ===")
+    await page.screenshot(path="bookingFinalizedPageStart.png")
 
     try:
         # Select 18 Holes
@@ -221,9 +222,11 @@ async def select_booking_information(page, players):
         # Select Cart = Yes (assuming selector based on inspection)
         # TODO: Add actual selector for Cart=Yes once HTML is provided.
         # For now, this is a placeholder.
-        logger.info("Selecting Cart = Yes (Placeholder - Need actual selector).")
+        # logger.info("Selecting Cart = Yes (Placeholder - Need actual selector).")
         # await page.click('selector_for_cart_yes', timeout=15000)
         # logger.info("Successfully selected Cart = Yes.")
+
+        await page.screenshot(path="bookingFinalizedPageEnd.png")
         
         # Click the 'Book Time' button
         book_time_button_selector = 'button.ob-book-time-continue-button'
@@ -277,6 +280,7 @@ async def finalize_booking(page):
         logger.info(f"Attempting to click the final Book Time button with selector: {final_book_time_button_selector}")
 
         try:
+
             # Use page.wait_for_selector followed by click()
             final_book_time_button = await page.wait_for_selector(final_book_time_button_selector, timeout=15000) # Increased timeout
             await final_book_time_button.click()
@@ -395,7 +399,7 @@ async def book_tee_time():
         async with async_playwright() as p:
             # Launch browser with arguments to make headless mode appear more like a regular browser
             browser = await p.chromium.launch(
-                headless=True,
+                headless=False,
                 args=[
                     '--disable-blink-features=AutomationControlled',
                     '--disable-features=IsolateOrigins,site-per-process',
