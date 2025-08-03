@@ -27,7 +27,6 @@ jobs:
     - name: Create .env file
       run: |
         cat << EOF > .env
-        DATE=${{ secrets.DATE }}
         TIME_RANGE_START=${{ secrets.TIME_RANGE_START }}
         TIME_RANGE_END=${{ secrets.TIME_RANGE_END }}
         PLAYERS=${{ secrets.PLAYERS }}

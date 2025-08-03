@@ -27,14 +27,28 @@ async def select_day(page, date_str):
         date_obj = datetime.strptime(date_str, '%Y-%m-%d')
         day_to_select = str(date_obj.day)
         
-        # We specifically look for a 'td' with class 'day' that does NOT have the 'disabled' class
-        # and contains the text of the day to select.
-        # Using page.locator().click() which waits for the element to be attached and visible.
-        day_selector = f'td.day:not(.disabled):has-text("{day_to_select}")'
-        logger.info(f"Attempting to click day {day_to_select} with selector: {day_selector}")
+        # Find all day elements with the target day number
+        days = page.locator(f'td.day:has-text("{day_to_select}")')
+        count = await days.count()
+        logger.info(f"Found {count} day elements with value {day_to_select}")
         
-        # Use page.locator and click, which handles waiting for the element.
-        await page.locator(day_selector).click()
+        clicked = False
+        for i in range(count):
+            class_attr = await days.nth(i).get_attribute('class')
+            text_content = (await days.nth(i).text_content()).strip()
+            logger.info(f"Day {i}: class='{class_attr}', text='{text_content}'")
+    
+            # Check if this day is not disabled and text matches exactly
+            if 'disabled' not in class_attr and text_content == day_to_select:
+                logger.info(f"Clicking day {day_to_select} at index {i} (class: {class_attr})")
+                await days.nth(i).click()
+                clicked = True
+                break
+        
+        if not clicked:
+            raise Exception(f'No enabled day "{day_to_select}" found to click!')
+
+        await asyncio.sleep(1)     
         logger.info(f"Successfully clicked on day {day_to_select}.")
         await page.screenshot(path="daySelected.png")
         logger.info("day selected screenshot")
@@ -342,28 +356,34 @@ async def book_tee_time():
     """
     try:
         # Get environment variables
-        date = os.getenv('DATE')
         time_range_start = os.getenv('TIME_RANGE_START')
         time_range_end = os.getenv('TIME_RANGE_END')
         players = os.getenv('PLAYERS')
         email = os.getenv('EMAIL')
         password = os.getenv('PASSWORD')
+        osprey_only = os.getenv('OSPREY_ONLY')
+        
+        # Calculate date 7 days from today
+        from datetime import datetime, timedelta
+        target_date = datetime.now() + timedelta(days=7)
+        date = target_date.strftime('%Y-%m-%d')
+        logger.info(f"Calculated target date: {date} (7 days from today)")
 
         # Clean up players value - remove quotes, comments, and extra whitespace
         if players:
             players = players.split('#')[0].strip().replace('"', '')
             logger.info(f"Cleaned players value: '{players}'")
 
-        logger.info(f"Attempting to book tee time for {date} between {time_range_start} and {time_range_end} for {players} player(s).")
+        logger.info(f"Attempting to book tee time for {date} between {time_range_start} and {time_range_end} for {players} player(s). Osprey only: {osprey_only}")
 
         # Validate required environment variables
         required_vars = {
-            'DATE': date,
             'TIME_RANGE_START': time_range_start,
             'TIME_RANGE_END': time_range_end,
             'PLAYERS': players,
             'EMAIL': email,
-            'PASSWORD': password
+            'PASSWORD': password,
+            'OSPREY_ONLY': osprey_only
         }
 
         missing_vars = [var for var, value in required_vars.items() if not value]
@@ -416,6 +436,13 @@ async def book_tee_time():
                 logger.info("Selecting Park Ridge course")
                 await page.locator('#js-course-list > div.filter-course-option[data-schedule-id="7483"] > div.filter-course-select-button-bordered.js-filter-course-select-toggle').click()
 
+                # If osprey only, filter by osprey
+                osprey_only_str = os.getenv('OSPREY_ONLY', 'false')
+                osprey_only = osprey_only_str.lower() == 'true'
+                if osprey_only:
+                    logger.info("Filtering by Osprey only")
+                    await page.locator('#js-course-list > div.filter-course-option[data-schedule-id="7480"] > div.filter-course-select-button-bordered.js-filter-course-select-toggle').click()
+
                 # Select player count filter
                 await select_players_filter(page, players)
 
@@ -435,7 +462,7 @@ async def book_tee_time():
                 await select_booking_information(post_login_page, players)
 
                 # Finalize the booking
-                await finalize_booking(post_login_page)
+                # await finalize_booking(post_login_page)
 
             except PlaywrightTimeoutError as e:
                 logger.error(f"Timeout error: {str(e)}")
