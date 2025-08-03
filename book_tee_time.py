@@ -396,7 +396,7 @@ async def book_tee_time():
         async with async_playwright() as p:
             # Launch browser with arguments to make headless mode appear more like a regular browser
             browser = await p.chromium.launch(
-                headless=False,
+                headless=True,
                 args=[
                     '--disable-blink-features=AutomationControlled',
                     '--disable-features=IsolateOrigins,site-per-process',
