@@ -183,7 +183,6 @@ async def select_booking_information(page, players):
     Clicks the 'Book Time' button to proceed.
     """
     logger.info("=== SELECTING BOOKING INFORMATION START ===")
-    await page.screenshot(path="bookingFinalizedPageStart.png")
 
     try:
         # Select 18 Holes
@@ -225,8 +224,6 @@ async def select_booking_information(page, players):
         # logger.info("Selecting Cart = Yes (Placeholder - Need actual selector).")
         # await page.click('selector_for_cart_yes', timeout=15000)
         # logger.info("Successfully selected Cart = Yes.")
-
-        await page.screenshot(path="bookingFinalizedPageEnd.png")
         
         # Click the 'Book Time' button
         book_time_button_selector = 'button.ob-book-time-continue-button'
