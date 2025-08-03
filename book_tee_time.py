@@ -462,7 +462,7 @@ async def book_tee_time():
                 await select_booking_information(post_login_page, players)
 
                 # Finalize the booking
-                # await finalize_booking(post_login_page)
+                await finalize_booking(post_login_page)
 
             except PlaywrightTimeoutError as e:
                 logger.error(f"Timeout error: {str(e)}")
