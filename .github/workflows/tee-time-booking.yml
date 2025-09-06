@@ -2,8 +2,8 @@ name: Tee Time Booking
 
 on:
   schedule:
-    # Run every Saturday and Sunday at 5:00 AM and 6:00 AM EST (10:00 AM and 11:00 AM UTC)
-    - cron: '0 10,11 * * 6,0'
+    # Run every Saturday and Sunday at 4:45 AM EST (9:45 AM UTC) - 15 min before target time
+    - cron: '45 9,10 * * 6,0'
 
   workflow_dispatch:  # Allow manual triggering
 
