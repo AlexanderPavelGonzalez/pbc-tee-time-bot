@@ -80,6 +80,9 @@ async def select_tee_time(page, time_range_start, time_range_end, players):
             raise Exception("No tee time cards found")
 
         # Parse the input time range for comparison
+        logger.info(f"Debug - time_range_start: '{time_range_start}'")
+        logger.info(f"Debug - time_range_end: '{time_range_end}'")
+        
         start_time_obj = datetime.strptime(time_range_start, '%H:%M').time()
         # If end time is less than start time, assume it's PM
         end_time_str = time_range_end
@@ -366,7 +369,7 @@ async def book_tee_time():
         
         # Calculate date 7 days from today
         from datetime import datetime, timedelta
-        target_date = datetime.now() + timedelta(days=7)
+        target_date = datetime.now() + timedelta(days=1)
         date = target_date.strftime('%Y-%m-%d')
         logger.info(f"Calculated target date: {date} (7 days from today)")
 
